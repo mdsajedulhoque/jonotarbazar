@@ -41,3 +41,4 @@ jonotar-bazar/
 ├── favicon.png             # Apple touch & mobile home screen icon
 ├── README.md               # Documentation
 └── assets/ / root          # Product images & media assets
+[![Netlify Status](https://api.netlify.com/api/v1/badges/137a7ecd-0bb8-4c2d-9385-8ec9ff67e72c/deploy-status)](https://app.netlify.com/projects/jonotarbazar/deploys)
