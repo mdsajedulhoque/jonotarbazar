@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jonotar Bazar | জনতার বাজার</title>
+<!-- Jonotar Bazar Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KWV51VG69Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KWV51VG69Z');
+    </script>
+<!-- Google AdSense Auto Ads Header Code -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1471938153244369"
+     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+...
+
+    <!-- Header Section -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo" onclick="showPage('home')" style="cursor: pointer;">
+                <img src="logo.jpg" alt="Jonotar Bazar Logo" id="site-logo">
+                <div class="logo-text">
+                    <h1>জনতার বাজার</h1>
+                    <span>JONOTAR BAZAR</span>
+                </div>
+            </div>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" onclick="showPage('home'); return false;">Home</a></li>
+                </ul>
+            </nav>
+
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+
+        
+        <section id="home-page" class="page active-page">
+            <div class="hero">
+                <h2>স্বাগতম জনতার বাজারে!</h2>
+                <p>প্রতিদিনের প্রয়োজন, এক জায়গায়</p>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="category-filter">
+                <button class="filter-btn active" onclick="filterProducts('all', event)">All product</button>
+                <button class="filter-btn deal-filter-btn" onclick="filterProducts('TodaysDeal', event)">🔥 Today's Deal</button>
+                <button class="filter-btn" onclick="filterProducts('Toys', event)">Toys (খেলনা)</button>
+                <button class="filter-btn" onclick="filterProducts('Early Learning', event)">Early Learning</button>
+                <button class="filter-btn" onclick="filterProducts('Books', event)">Books (বই)</button>
+            </div>
+<!-- Ruchi Ads - Ad Display Code -->
+<div id="adm-container-480"></div><script data-cfasync="false" async type="text/javascript" src="//ruchiads.com/display/items.php?480&4604&300&250&0&0&0"></script>
+<!-- Ruchi Ads - Ad Display Code -->
+<!-- Adsterra Direct Link (Text) -->
+<a href="https://www.profitableratecpmnetwork.com/p997ht5h?key=74448f436f806c86382ced54bce1b308" target="_blank" rel="nofollow">
+    Click here for Exclusive Deals!
+</a>
+            <!-- Product Grid -->
+            <div class="product-grid" id="product-container">
+                <!-- JS will populate products here -->
+            </div>
+        </section>
+
+        
+        <section id="checkout-page" class="page">
+            <h2>Checkout / চেকআউট</h2>
+            <div class="checkout-container">
+                <div class="order-summary-box">
+                    <h3>Your Order Summary</h3>
+                    <div id="checkout-items"></div>
+                    <hr style="margin: 15px 0;">
+                    <div class="checkout-total">
+                        <strong>Total: ৳<span id="checkout-total-price">0</span></strong>
+                    </div>
+                </div>
+
+                <form id="checkout-form" onsubmit="handleOrderSubmit(event)">
+                    <h3>Shipping & Payment Details</h3>
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="cust-name" required placeholder="আপনার নাম লিখুন">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="cust-phone" required placeholder="017XXXXXXXX">
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Address *</label>
+                        <textarea id="cust-address" required rows="3" placeholder="পূর্ণাঙ্গ ঠিকানা লিখুন"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Method *</label>
+                        <select id="cust-payment" onchange="togglePaymentDetails()">
+                            <option value="Cash on Delivery">Cash on Delivery (ক্যাশ অন ডেলিভারি)</option>
+                            <option value="bKash">bKash (বিকাশ)</option>
+                            <option value="Nagad">Nagad (নগদ)</option>
+                        </select>
+                    </div>
+
+                   
+                    <div id="mfs-details" class="mfs-notice" style="display: none;">
+                        <p><strong><span id="selected-mfs-name">bKash</span> Payment Instructions:</strong></p>
+                        <p>Please <strong>Send Money</strong> to: <strong class="phone-highlight">01673989932</strong> (Personal)</p>
+                        <p><small>পেমেন্ট সম্পন্ন করার পর নিচের বক্সে Sender Number এবং Transaction ID লিখুন।</small></p>
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label>Sender Mobile Number / Transaction ID</label>
+                            <input type="text" id="mfs-trx-id" placeholder="e.g. 017XXXXXXX / TRX123456">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top: 15px;">Confirm Order</button>
+                </form>
+            </div>
+        </section>
+
+        
+        <section id="confirmation-page" class="page">
+            <div class="confirmation-box">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h2>অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!</h2>
+                <p>ধন্যবাদ, আপনার অর্ডারের তথ্য আমরা পেয়েছি। আমাদের প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবেন।</p>
+                <div class="order-details" id="order-details-box">
+                    <!-- Order summary will be shown here dynamically -->
+                </div>
+                <button onclick="showPage('home')" class="btn btn-primary">Continue Shopping</button>
+            </div>
+        </section>
+
+        
+        <section id="privacy-policy-page" class="page">
+            <div class="policy-box">
+                <h2>Privacy & Copyright Policy</h2>
+                
+                <h3>1. Copyright Notice</h3>
+                <p>&copy; 2026 Jonotar Bazar. All Rights Reserved. All graphics, product names, site design, images, and content on this website belong exclusively to Jonotar Bazar. Unauthorized copying, re-distribution, or use without permission is strictly prohibited.</p>
+
+                <h3>2. Privacy Policy</h3>
+                <p>At <strong>Jonotar Bazar</strong>, we respect the privacy of our customers. We collect necessary information such as your name, contact phone number, and delivery address strictly for the purpose of processing and delivering your orders.</p>
+                <ul>
+                    <li>We do not sell, rent, or trade your personal information to third parties.</li>
+                    <li>Your personal details are stored securely and accessed only by personnel managing order fulfillment.</li>
+                    <li>If you wish to update or delete your information from our system, please contact our support team.</li>
+                </ul>
+
+                <h3>3. Contact Us</h3>
+                <p>For any queries regarding terms or policy, call us at <strong>01728081064</strong></p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Slide-over Shopping Cart Drawer -->
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div id="cart-items" class="cart-body"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span>৳<span id="cart-total-price">0</span></span>
+            </div>
+            <button onclick="goToCheckout()" class="btn btn-primary btn-block">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div id="cart-overlay" class="cart-overlay" onclick="toggleCart()"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div>
+                <h3>Jonotar Bazar (জনতার বাজার)</h3>
+                <p>Phone: <a href="tel:01728081064">01728081064</a></p>
+                <p>Facebook: <a href="https://www.facebook.com/Jonotar.Bazar" target="_blank">Jonotar.Bazar</a></p>
+            </div>
+            <div>
+                <p>&copy; 2026 Jonotar Bazar. All rights reserved.</p>
+                <p><a href="#" onclick="showPage('privacy-policy'); return false;">Privacy & Copyright Policy</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <!-- Ruchi Ads - Ad Display Code Direct Link -->
+<div id="adm-container-481"></div><script data-cfasync="false" async type="text/javascript" src="//ruchiads.com/display/items.php?481&4604&0&0&0&0&0"></script>
+<!-- Ruchi Ads - Ad Display Code -->
+<!-- Adsterra Ads Code -->
+    <script src="https://pl31449898.profitableratecpmnetwork.com/29/34/3b/29343b3997c4a544f60aec3fc98d60bd.js"></script>
+    </body>
+</html>
