@@ -177,14 +177,14 @@ function addToCart(productId) {
     updateCartUI();
     toggleCart(true);
 
-  // Trigger Meta AddToCart Event safely
-  if (typeof fbq === 'function') {
-    fbq('track', 'AddToCart', {
-      content_name: product.name || 'Flash Cards / Math Set',
-      value: product.price || 0,
-      currency: 'BDT'
-    });
-  }
+    // Trigger Meta AddToCart Event safely
+    if (typeof fbq === 'function') {
+        fbq('track', 'AddToCart', {
+            content_name: product.name || 'Product',
+            value: product.price || 0,
+            currency: 'BDT'
+        });
+    }
 }
 
 function removeFromCart(productId) {
@@ -309,7 +309,7 @@ async function handleOrderSubmit(event) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            access_key: "0323a555-036c-45c0-b177-9182274bf941", // <-- Replace with your Web3Forms Access Key
+            access_key: "0323a555-036c-45c0-b177-9182274bf941",
             subject: `🛒 New Order from ${name} (৳${total})`,
             Customer_Name: name,
             Phone: phone,
@@ -324,7 +324,7 @@ async function handleOrderSubmit(event) {
     // -----------------------------------------------------------------
     // METHOD 2: Google Sheets (Database Recording)
     // -----------------------------------------------------------------
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxeFwiQ11Y7oX8ro6zn2PPJ2HT29ryGphrkno0Lx_ZwYnOZZP6gHdUcUuHIy1JkHpk/exec"; // <-- Replace with your Google Web App URL
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxeFwiQ11Y7oX8ro6zn2PPJ2HT29ryGphrkno0Lx_ZwYnOZZP6gHdUcUuHIy1JkHpk/exec";
 
     const sheetData = new FormData();
     sheetData.append("name", name);
@@ -354,20 +354,23 @@ async function handleOrderSubmit(event) {
         `;
     }
 
+    // Trigger Meta Purchase Event safely
+    if (typeof fbq === 'function') {
+        fbq('track', 'Purchase', {
+            value: total || 0,
+            currency: 'BDT'
+        });
+    }
+
     // 4. Reset Cart, Form and Show Confirmation Page
     cart = [];
     updateCartUI();
     document.getElementById("checkout-form").reset();
-    document.getElementById("mfs-details").style.display = "none";
+    if (document.getElementById("mfs-details")) {
+        document.getElementById("mfs-details").style.display = "none";
+    }
     submitBtn.innerText = originalBtnText;
     submitBtn.disabled = false;
 
-  // Trigger Meta Purchase Event safely
-  if (typeof fbq === 'function') {
-    fbq('track', 'Purchase', {
-      value: orderDetails.totalAmount || 0,
-      currency: 'BDT'
-    });
-  }
     showPage('confirmation');
 }
