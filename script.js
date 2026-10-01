@@ -176,6 +176,15 @@ function addToCart(productId) {
 
     updateCartUI();
     toggleCart(true);
+
+  // Trigger Meta AddToCart Event safely
+  if (typeof fbq === 'function') {
+    fbq('track', 'AddToCart', {
+      content_name: product.name || 'Flash Cards / Math Set',
+      value: product.price || 0,
+      currency: 'BDT'
+    });
+  }
 }
 
 function removeFromCart(productId) {
@@ -353,5 +362,12 @@ async function handleOrderSubmit(event) {
     submitBtn.innerText = originalBtnText;
     submitBtn.disabled = false;
 
+  // Trigger Meta Purchase Event safely
+  if (typeof fbq === 'function') {
+    fbq('track', 'Purchase', {
+      value: orderDetails.totalAmount || 0,
+      currency: 'BDT'
+    });
+  }
     showPage('confirmation');
 }
