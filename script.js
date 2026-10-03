@@ -1,4 +1,3 @@
-
 const products = [
   
     { 
@@ -7,7 +6,7 @@ const products = [
         category: "TodaysDeal", 
         price: 1000, 
         originalPrice: 1050, 
-        image: "Janatar bazar-flash-cards-combo offer.jpg" 
+        image: "Jonatar bazar-flash-cards-combo offer.jpg" 
     },
     { 
         id: 102, 
@@ -24,6 +23,22 @@ const products = [
         price: 1400, 
         originalPrice: 1500, 
         image: "jonotar bazar-puppet-combo.jpg" 
+    },
+    { 
+        id: 104, 
+        name: "স্টাডি প্যাক কম্বো (1 Flash Card- Bangla+ 1 Flash Card- English)", 
+        category: "TodaysDeal", 
+        price: 800, 
+        originalPrice: 830, 
+        image: "Jonatar bazar-flash-cards-combo offer-Bangla-English.jpg" 
+    },
+    { 
+        id: 105, 
+        name: "সিঙ্গাপুর ম্যাথ বই লেভেল-১ (১এ+ ১বি)", 
+        category: "TodaysDeal", 
+        price: 750, 
+        originalPrice: 900, 
+        image: "Jonotar bazar-Book-Singapore-Math-1A-1B-Combo-Offer.jpg" 
     },
 
     
