@@ -48,10 +48,16 @@ const products = [
 ];
 
 let cart = [];
-
+// Track event helper
+function trackEvent(gaName, gaParams, fbName, fbParams) {
+    if (typeof gtag === 'function') gtag('event', gaName, gaParams);
+    if (typeof fbq === 'function') fbq('track', fbName, fbParams);
+}
 // Initialize Page & History State
 document.addEventListener("DOMContentLoaded", () => {
-    renderProducts(products);
+    if (typeof products !== "undefined") {
+        renderProducts(products);
+    }
     
     const hash = window.location.hash.replace('#', '');
     const initialPage = hash ? hash : 'home';
@@ -79,7 +85,8 @@ function switchPageUI(pageName) {
     if (targetPage) {
         targetPage.classList.add("active-page");
     } else {
-        document.getElementById("home-page").classList.add("active-page");
+        const homePage = document.getElementById("home-page");
+        if (homePage) homePage.classList.add("active-page");
     }
     window.scrollTo(0, 0);
 }
@@ -93,7 +100,7 @@ function showPage(pageName) {
 // Render Products Grid
 function renderProducts(items) {
     const container = document.getElementById("product-container");
-    if(!container) return;
+    if (!container) return;
     container.innerHTML = "";
 
     items.forEach(product => {
@@ -139,7 +146,9 @@ function renderProducts(items) {
 function filterProducts(category, event) {
     const buttons = document.querySelectorAll(".filter-btn");
     buttons.forEach(btn => btn.classList.remove("active"));
-    if(event) event.target.classList.add("active");
+    if (event && event.target) event.target.classList.add("active");
+
+    if (typeof products === "undefined") return;
 
     if (category === 'all') {
         renderProducts(products);
@@ -154,6 +163,8 @@ function toggleCart(forceOpen = false) {
     const drawer = document.getElementById("cart-drawer");
     const overlay = document.getElementById("cart-overlay");
 
+    if (!drawer || !overlay) return;
+
     if (forceOpen) {
         drawer.classList.add("open");
         overlay.classList.add("show");
@@ -165,7 +176,10 @@ function toggleCart(forceOpen = false) {
 
 // Cart Operations
 function addToCart(productId) {
+    if (typeof products === "undefined") return;
     const product = products.find(p => p.id === productId);
+    if (!product) return;
+
     const existingIndex = cart.findIndex(item => item.id === productId);
 
     if (existingIndex > -1) {
@@ -177,14 +191,18 @@ function addToCart(productId) {
     updateCartUI();
     toggleCart(true);
 
-    // Trigger Meta AddToCart Event safely
-    if (typeof fbq === 'function') {
-        fbq('track', 'AddToCart', {
-            content_name: product.name || 'Product',
-            value: product.price || 0,
-            currency: 'BDT'
-        });
-    }
+    // Track AddToCart (Google Analytics + Meta Pixel)
+    trackEvent('add_to_cart', {
+        currency: 'BDT',
+        value: product.price,
+        items: [{ item_id: String(product.id), item_name: product.name, price: product.price, quantity: 1 }]
+    }, 'AddToCart', {
+        content_name: product.name,
+        content_ids: [String(product.id)],
+        content_type: 'product',
+        value: product.price,
+        currency: 'BDT'
+    });
 }
 
 function removeFromCart(productId) {
@@ -208,6 +226,8 @@ function updateCartUI() {
     const cartItems = document.getElementById("cart-items");
     const cartCount = document.getElementById("cart-count");
     const cartTotalPrice = document.getElementById("cart-total-price");
+
+    if (!cartItems || !cartCount || !cartTotalPrice) return;
 
     cartItems.innerHTML = "";
     let total = 0;
@@ -240,9 +260,13 @@ function updateCartUI() {
 
 // Payment method selector
 function togglePaymentDetails() {
-    const method = document.getElementById("cust-payment").value;
+    const paymentElem = document.getElementById("cust-payment");
     const mfsBox = document.getElementById("mfs-details");
     const mfsName = document.getElementById("selected-mfs-name");
+
+    if (!paymentElem || !mfsBox || !mfsName) return;
+
+    const method = paymentElem.value;
 
     if (method === "bKash" || method === "Nagad") {
         mfsName.innerText = method;
@@ -263,33 +287,52 @@ function goToCheckout() {
     const summaryBox = document.getElementById("checkout-items");
     const checkoutTotal = document.getElementById("checkout-total-price");
     
-    summaryBox.innerHTML = "";
+    if (summaryBox) summaryBox.innerHTML = "";
     let total = 0;
 
     cart.forEach(item => {
         total += item.price * item.quantity;
-        summaryBox.innerHTML += `
-            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
-                <span>${item.name} (x${item.quantity})</span>
-                <span>৳${item.price * item.quantity}</span>
-            </div>
-        `;
+        if (summaryBox) {
+            summaryBox.innerHTML += `
+                <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+                    <span>${item.name} (x${item.quantity})</span>
+                    <span>৳${item.price * item.quantity}</span>
+                </div>
+            `;
+        }
     });
 
-    checkoutTotal.innerText = total;
+    if (checkoutTotal) checkoutTotal.innerText = total;
+    //Track event
+trackEvent('begin_checkout', {
+    currency: 'BDT',
+    value: total,
+    items: cart.map(i => ({ item_id: String(i.id), item_name: i.name, price: i.price, quantity: i.quantity }))
+}, 'InitiateCheckout', {
+    value: total,
+    currency: 'BDT',
+    num_items: cart.reduce((s, i) => s + i.quantity, 0)
+});
+
     showPage('checkout');
 }
 
 // Final Order Submission (Web3Forms + Google Sheets)
 async function handleOrderSubmit(event) {
     event.preventDefault();
-
+//Empty cart notification
+    if (cart.length === 0) {
+    alert("Your cart is empty!");
+    showPage('home');
+    return;
+}
+const orderId = 'ORD-' + Date.now();
     // 1. Gather Form Data
-    const name = document.getElementById("cust-name").value;
-    const phone = document.getElementById("cust-phone").value;
-    const address = document.getElementById("cust-address").value;
-    const payment = document.getElementById("cust-payment").value;
-    const mfsTrx = document.getElementById("mfs-trx-id").value;
+    const name = document.getElementById("cust-name")?.value || "";
+    const phone = document.getElementById("cust-phone")?.value || "";
+    const address = document.getElementById("cust-address")?.value || "";
+    const payment = document.getElementById("cust-payment")?.value || "";
+    const mfsTrx = document.getElementById("mfs-trx-id")?.value || "";
 
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
@@ -319,7 +362,7 @@ async function handleOrderSubmit(event) {
             Ordered_Items: cartSummaryText,
             Total_Amount: `৳${total}`
         })
-    }).catch(err => console.error("Email notification error:", err));
+    });
 
     // -----------------------------------------------------------------
     // METHOD 2: Google Sheets (Database Recording)
@@ -337,10 +380,22 @@ async function handleOrderSubmit(event) {
     const sheetPromise = fetch(GOOGLE_SHEET_URL, {
         method: "POST",
         body: sheetData
-    }).catch(err => console.error("Google Sheets error:", err));
+    });
 
-    // Execute Email and Google Sheet requests asynchronously in parallel
-    await Promise.allSettled([emailPromise, sheetPromise]);
+    // Execute Email and Google Sheet requests in parallel
+    const [emailResult, sheetResult] = await Promise.allSettled([emailPromise, sheetPromise]);
+
+    const emailOk = emailResult.status === 'fulfilled' && emailResult.value.ok;
+    const sheetOk = sheetResult.status === 'fulfilled';
+
+    // Verification check
+    if (!emailOk && !sheetOk) {
+        alert("দুঃখিত, অর্ডার জমা হয়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।");
+        if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+        submitBtn.innerText = originalBtnText;
+        submitBtn.disabled = false;
+        return;
+    }
 
     // 3. Update Order Confirmation Screen Details
     const detailsBox = document.getElementById("order-details-box");
@@ -354,21 +409,25 @@ async function handleOrderSubmit(event) {
         `;
     }
 
-    // Trigger Meta Purchase Event safely
-    if (typeof fbq === 'function') {
-        fbq('track', 'Purchase', {
-            value: total || 0,
-            currency: 'BDT'
-        });
-    }
+    // Universal Purchase Event Safely Execution
+    trackEvent('purchase', {
+    transaction_id: orderId,
+    currency: 'BDT',
+    value: total,
+    payment_type: payment,
+    items: cart.map(i => ({ item_id: String(i.id), item_name: i.name, price: i.price, quantity: i.quantity }))
+}, 'Purchase', { value: total, currency: 'BDT' });
 
     // 4. Reset Cart, Form and Show Confirmation Page
     cart = [];
     updateCartUI();
-    document.getElementById("checkout-form").reset();
+    const checkoutForm = document.getElementById("checkout-form");
+    if (checkoutForm) checkoutForm.reset();
+
     if (document.getElementById("mfs-details")) {
         document.getElementById("mfs-details").style.display = "none";
     }
+
     submitBtn.innerText = originalBtnText;
     submitBtn.disabled = false;
 
