@@ -418,7 +418,7 @@ async function handleOrderSubmit(event) {
     });
 
     // 2. Google Sheets Apps Script Submit
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzoqFkMJHBVY18tuN043zqBSPRciTzzsmjh4_F30MpaSMQIUQTkOUw6A75ymW78k_w/exec";
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzhaWB3fr28SMXXhb2AH4RI_31ETVTrwwhEw4yr_cCbc29ybc2D5zZEgoPA6xgPav9Y/exec";
 
     const sheetParams = new URLSearchParams();
     sheetParams.append("orderId", orderId);
