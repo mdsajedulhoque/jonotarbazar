@@ -409,7 +409,7 @@ async function handleOrderSubmit(event) {
     });
 
     // Google Sheets Submit
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxhGZSIW3LnfkLenVv9A6gx7brcWNPNI_Nhkxu6XZ5hGfGhZ-6cSAo5PBaX3h3myw/exec";
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzoqFkMJHBVY18tuN043zqBSPRciTzzsmjh4_F30MpaSMQIUQTkOUw6A75ymW78k_w/exec";
 
     const sheetData = new FormData();
     sheetData.append("orderId", orderId);
