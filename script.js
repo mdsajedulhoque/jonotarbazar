@@ -408,25 +408,30 @@ async function handleOrderSubmit(event) {
         })
     });
 
-    // Google Sheets Submit
-    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzoqFkMJHBVY18tuN043zqBSPRciTzzsmjh4_F30MpaSMQIUQTkOUw6A75ymW78k_w/exec";
+    // Google Sheets Submit (Reliable URLSearchParams Payload)
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzoqFkMJHBVY18tuN043zqBSPRciTzzsmjh4_F30MpaSMQIUQTkOUw6A75ymW78k_w/exec";
 
-    const sheetData = new FormData();
-    sheetData.append("orderId", orderId);
-    sheetData.append("name", name);
-    sheetData.append("phone", phone);
-    sheetData.append("district", district);
-    sheetData.append("upazila", upazila || "N/A");
-    sheetData.append("address", fullAddress);
-    sheetData.append("deliveryFee", `৳${currentDeliveryFee}`);
-    sheetData.append("payment", payment + (mfsTrx ? ` (Trx: ${mfsTrx})` : ''));
-    sheetData.append("items", cartSummarySingleLine);
-    sheetData.append("total", `৳${grandTotal}`);
+const sheetParams = new URLSearchParams();
+sheetParams.append("orderId", orderId);
+sheetParams.append("name", name);
+sheetParams.append("phone", phone);
+sheetParams.append("district", district);
+sheetParams.append("upazila", upazila || "N/A");
+sheetParams.append("address", fullAddress);
+sheetParams.append("items", cartSummarySingleLine);
+sheetParams.append("subtotal", `৳${subtotal}`);
+sheetParams.append("deliveryFee", `৳${currentDeliveryFee}`);
+sheetParams.append("grandTotal", `৳${grandTotal}`);
+sheetParams.append("payment", payment + (mfsTrx ? ` (Trx: ${mfsTrx})` : ''));
 
-    const sheetPromise = fetch(GOOGLE_SHEET_URL, {
-        method: "POST",
-        body: sheetData
-    });
+const sheetPromise = fetch(GOOGLE_SHEET_URL, {
+    method: "POST",
+    mode: "no-cors", // Ensures request passes cleanly to Apps Script without CORS blockage
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: sheetParams.toString()
+});
 
     const [emailResult, sheetResult] = await Promise.allSettled([emailPromise, sheetPromise]);
 
