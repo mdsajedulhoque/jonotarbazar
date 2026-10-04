@@ -3,7 +3,7 @@ const products = [
     { id: 102, name: "প্লে টাইম কম্বো অফার (1 UNO + 1 chor police dakat babu + 1 Ludo)", category: "TodaysDeal", price: 800, originalPrice: 850, image: "JB-Game time-combo.jpg" },
     { id: 103, name: "স্টোরি টাইম পাপেট কম্বো (1 Red Bunny Puppet+ 1 Pink Bunny Puppet)", category: "TodaysDeal", price: 1400, originalPrice: 1500, image: "jonotar bazar-puppet-combo.jpg" },
     { id: 104, name: "স্টাডি প্যাক কম্বো (1 Flash Card- Bangla+ 1 Flash Card- English)", category: "TodaysDeal", price: 800, originalPrice: 830, image: "Jonatar bazar-flash-cards-combo offer-Bangla-English.jpg" },
-    { id: 105, name: "সিঙ্গাপুর ম্যাথ বই লেভেল-১ (১এ+ ১বি)", category: "TodaysDeal", price: 750, originalPrice: 900, image: "Jonotar bazar-Book-Singapore-Math-1A-1B-Combo-Offer.jpg" },
+    { id: 105, name: "সিঙ্গাপুর ম্যাথ বই লেভেল-১ (১এ+ ১বি)", category: "TodaysDeal", price: 750, originalPrice: 900, image: "Jonatar bazar-Book-Singapore-Math-1A-1B-Combo-Offer.jpg" },
     { id: 1, name: "গুফি চোর পুলিশ ডাকাত বাবু (Goofi chor police dakat babu)", category: "Toys", price: 250, image: "Goofi-Toys-Chor-Police-Dakat-Babu.jpeg" },
     { id: 2, name: "লুডু বোর্ড- ছোট (Ludo Board - Small)", category: "Toys", price: 350, image: "Goofi-Toys-Ludu-1-22 by 22.jpg" },
     { id: 3, name: "হ্যান্ড পাপেট- লাল (Hand Puppet- Red)", category: "Toys", price: 750, image: "Goofi-Toys-Hand-Puppet-Red.jpg" },
@@ -18,7 +18,7 @@ const products = [
     { id: 12, name: "সিঙ্গাপুর ম্যাথ ১বি- ইংরেজি-বাংলা (Singapore Math 1B- English-Bangla Edition)", category: "Books", price: 450, image: "Singapore-Math-1B-English-bangla.jpg" },
     { id: 13, name: "সিঙ্গাপুর ম্যাথ ২এ (Singapore Math 2A)", category: "Books", price: 450, image: "Singapore-Math-Level-2-2A.jpg" },
     { id: 14, name: "সিঙ্গাপুর ম্যাথ ২বি (Singapore Math 2B)", category: "Books", price: 490, image: "Singapore-Math-Level-2-2B.jpg" },
-    { id: 15, name: "বর্ণ নিয়ে খেলি - স্বরবর্ণ (Borno Niye Kheli- Sarborno)", category: "Books", price: 380, image: "Goofi-Books-Borno-Niye-kheli-Sorborno.jpg" },
+    { id: 15, name: "বর্ণ নিয়ে খেলি - স্বরবর্ণ (Borno Niye Kheli- Sarborno)", category: "Books", price: 380, image: "Goofi-Books-Borno-Niye-kheli-Sorborno.jpg" },
     { id: 16, name: "অক্ষর থেকে ছবি - ইংরেজি (Letter to picture- English)", category: "Books", price: 340, image: "Goofi-Toys-Letter-to-Picture-English.jpg" },
     { id: 17, name: "অক্ষর থেকে ছবি - বাংলা (Letter to picture- Bangla)", category: "Books", price: 350, image: "Goofi-Toys-Letter-to-Picture-Bangla.jpg" },
     { id: 18, name: "মার্কাটা কি? ডালপুরি (Marka Ta Ki? Dalpuri)", category: "Books", price: 250, image: "Marka Ta Ki Dalpuri.jpg" }   
@@ -57,7 +57,6 @@ window.addEventListener('popstate', (event) => {
 });
 
 function switchPageUI(pageName) {
-    // Problem 1 Fix: Guard empty cart access to checkout
     if (pageName === 'checkout' && cart.length === 0) {
         pageName = 'home';
     }
@@ -251,11 +250,14 @@ function updateCartUI() {
     cartTotalPrice.innerText = total;
 }
 
-// Problem 2 Fix: Handle District & Upazila Selection & Dynamic Delivery Charges
 function handleDistrictChange() {
-    const district = document.getElementById("cust-district").value;
+    const districtElem = document.getElementById("cust-district");
     const upazilaWrapper = document.getElementById("upazila-wrapper");
     const upazilaSelect = document.getElementById("cust-upazila");
+
+    if (!districtElem || !upazilaWrapper || !upazilaSelect) return;
+
+    const district = districtElem.value;
 
     if (district === "Lakshmipur") {
         upazilaWrapper.style.display = "block";
@@ -276,8 +278,13 @@ function handleDistrictChange() {
 }
 
 function updateDeliveryCharge() {
-    const district = document.getElementById("cust-district").value;
-    const upazila = document.getElementById("cust-upazila").value;
+    const districtElem = document.getElementById("cust-district");
+    const upazilaElem = document.getElementById("cust-upazila");
+
+    if (!districtElem || !upazilaElem) return;
+
+    const district = districtElem.value;
+    const upazila = upazilaElem.value;
 
     if (district === "Lakshmipur") {
         if (upazila === "Lakshmipur Sadar") {
@@ -382,11 +389,13 @@ async function handleOrderSubmit(event) {
     const cartSummarySingleLine = cart.map(i => `${i.name} (x${i.quantity})`).join('; ');
 
     const submitBtn = event.target.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.innerText;
-    submitBtn.innerText = "Processing Order...";
-    submitBtn.disabled = true;
+    const originalBtnText = submitBtn ? submitBtn.innerText : "Submit Order";
+    if (submitBtn) {
+        submitBtn.innerText = "Processing Order...";
+        submitBtn.disabled = true;
+    }
 
-    // Web3Forms Submit
+    // 1. Web3Forms Submit
     const emailPromise = fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -408,30 +417,27 @@ async function handleOrderSubmit(event) {
         })
     });
 
-    // Google Sheets Submit (Reliable URLSearchParams Payload)
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzoqFkMJHBVY18tuN043zqBSPRciTzzsmjh4_F30MpaSMQIUQTkOUw6A75ymW78k_w/exec";
+    // 2. Google Sheets Apps Script Submit
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzoqFkMJHBVY18tuN043zqBSPRciTzzsmjh4_F30MpaSMQIUQTkOUw6A75ymW78k_w/exec";
 
-const sheetParams = new URLSearchParams();
-sheetParams.append("orderId", orderId);
-sheetParams.append("name", name);
-sheetParams.append("phone", phone);
-sheetParams.append("district", district);
-sheetParams.append("upazila", upazila || "N/A");
-sheetParams.append("address", fullAddress);
-sheetParams.append("items", cartSummarySingleLine);
-sheetParams.append("subtotal", `৳${subtotal}`);
-sheetParams.append("deliveryFee", `৳${currentDeliveryFee}`);
-sheetParams.append("grandTotal", `৳${grandTotal}`);
-sheetParams.append("payment", payment + (mfsTrx ? ` (Trx: ${mfsTrx})` : ''));
+    const sheetParams = new URLSearchParams();
+    sheetParams.append("orderId", orderId);
+    sheetParams.append("name", name);
+    sheetParams.append("phone", phone);
+    sheetParams.append("district", district);
+    sheetParams.append("upazila", upazila || "N/A");
+    sheetParams.append("address", fullAddress);
+    sheetParams.append("items", cartSummarySingleLine);
+    sheetParams.append("subtotal", `৳${subtotal}`);
+    sheetParams.append("deliveryFee", `৳${currentDeliveryFee}`);
+    sheetParams.append("grandTotal", `৳${grandTotal}`);
+    sheetParams.append("payment", payment + (mfsTrx ? ` (Trx: ${mfsTrx})` : ''));
 
-const sheetPromise = fetch(GOOGLE_SHEET_URL, {
-    method: "POST",
-    mode: "no-cors", // Ensures request passes cleanly to Apps Script without CORS blockage
-    headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: sheetParams.toString()
-});
+    const sheetPromise = fetch(GOOGLE_SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: sheetParams
+    });
 
     const [emailResult, sheetResult] = await Promise.allSettled([emailPromise, sheetPromise]);
 
@@ -441,8 +447,10 @@ const sheetPromise = fetch(GOOGLE_SHEET_URL, {
     if (!emailOk && !sheetOk) {
         alert("দুঃখিত, অর্ডার জমা হয়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।");
         if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
+        if (submitBtn) {
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
+        }
         return;
     }
 
@@ -479,12 +487,15 @@ const sheetPromise = fetch(GOOGLE_SHEET_URL, {
     if (checkoutForm) checkoutForm.reset();
     currentDeliveryFee = 0;
 
-    if (document.getElementById("mfs-details")) {
-        document.getElementById("mfs-details").style.display = "none";
+    const mfsBox = document.getElementById("mfs-details");
+    if (mfsBox) {
+        mfsBox.style.display = "none";
     }
 
-    submitBtn.innerText = originalBtnText;
-    submitBtn.disabled = false;
+    if (submitBtn) {
+        submitBtn.innerText = originalBtnText;
+        submitBtn.disabled = false;
+    }
 
     showPage('confirmation');
 }
