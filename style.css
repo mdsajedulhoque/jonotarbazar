@@ -27,10 +27,10 @@ body {
     padding: 0 15px;
 }
 
-
+/* Header & Navbar */
 .navbar {
     background-color: #ffffff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -105,7 +105,7 @@ body {
     font-weight: bold;
 }
 
-
+/* Main Layout */
 main {
     flex: 1;
     padding: 20px 15px;
@@ -119,7 +119,7 @@ main {
     display: block;
 }
 
-
+/* Hero Section */
 .hero {
     background-color: var(--primary-color);
     color: white;
@@ -129,7 +129,7 @@ main {
     margin-bottom: 20px;
 }
 
-
+/* Filters */
 .category-filter {
     display: flex;
     gap: 10px;
@@ -147,7 +147,8 @@ main {
     font-weight: 600;
 }
 
-.filter-btn.active, .filter-btn:hover {
+.filter-btn.active,
+.filter-btn:hover {
     background-color: var(--primary-color);
     color: white;
 }
@@ -157,12 +158,13 @@ main {
     color: var(--accent-color) !important;
 }
 
-.deal-filter-btn.active, .deal-filter-btn:hover {
+.deal-filter-btn.active,
+.deal-filter-btn:hover {
     background-color: var(--accent-color) !important;
     color: white !important;
 }
 
-
+/* Product Cards */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -183,7 +185,7 @@ main {
 
 .product-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .img-wrapper {
@@ -192,14 +194,14 @@ main {
 
 .product-card img {
     width: 100%;
-    height: 250px;
+    height: 220px;
     object-fit: cover;
     border-radius: 6px;
     margin-bottom: 10px;
 }
 
 .product-card img.deal-img {
-    height: 180px;
+    height: 220px;
     object-fit: contain;
 }
 
@@ -242,7 +244,7 @@ main {
     font-weight: normal;
 }
 
-
+/* Buttons */
 .btn {
     padding: 10px 15px;
     border: none;
@@ -265,15 +267,16 @@ main {
     width: 100%;
 }
 
-
+/* Cart Slide-out Drawer */
 .cart-drawer {
     position: fixed;
     top: 0;
-    right: -350px;
-    width: 320px;
+    right: -100%;
+    width: 100%;
+    max-width: 350px;
     height: 100%;
     background: white;
-    box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
     z-index: 200;
     transition: right 0.3s ease;
     display: flex;
@@ -328,8 +331,11 @@ main {
 
 .cart-overlay {
     position: fixed;
-    top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     z-index: 150;
     display: none;
 }
@@ -338,7 +344,7 @@ main {
     display: block;
 }
 
-
+/* Checkout Page */
 .checkout-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -346,19 +352,24 @@ main {
     margin-top: 20px;
 }
 
-@media(max-width: 768px) {
-    .checkout-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-.order-summary-box, form {
+.order-summary-box,
+form {
     background: white;
     padding: 20px;
     border-radius: 8px;
     border: 1px solid var(--gray-border);
 }
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: #444;
+}
 
+#checkout-total-price {
+    color: var(--accent-color);
+}
 .form-group {
     margin-bottom: 15px;
 }
@@ -369,7 +380,9 @@ main {
     font-weight: 600;
 }
 
-.form-group input, .form-group textarea, .form-group select {
+.form-group input,
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -395,7 +408,7 @@ main {
     font-size: 1.05rem;
 }
 
-
+/* Confirmation Page */
 .confirmation-box {
     background: white;
     text-align: center;
@@ -419,7 +432,7 @@ main {
     border-radius: 6px;
 }
 
-}
+/* Policy Page */
 .policy-box {
     background: white;
     padding: 30px;
@@ -432,7 +445,7 @@ main {
     color: var(--primary-color);
 }
 
-
+/* Footer */
 footer {
     background-color: #1a1a1a;
     color: white;
@@ -450,4 +463,20 @@ footer {
 footer a {
     color: #4caf50;
     text-decoration: none;
+}
+
+/* Mobile Media Queries */
+@media (max-width: 768px) {
+    .checkout-container {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        gap: 12px;
+        font-size: 0.9rem;
+    }
+
+    .logo-text h1 {
+        font-size: 1.2rem;
+    }
 }
