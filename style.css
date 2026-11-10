@@ -343,7 +343,129 @@ main {
 .cart-overlay.show {
     display: block;
 }
+/* ================= 11.11 CAMPAIGN STYLES ================= */
+.eleven-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
 
+.eleven-modal-content {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    max-width: 420px;
+    width: 90%;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+}
+
+.eleven-popup-img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+}
+
+.eleven-close {
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    z-index: 10;
+    background: #fff;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    line-height: 28px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.eleven-btn-main {
+    margin-top: 12px;
+    background: linear-gradient(135deg, #e53935, #b71c1c);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
+}
+
+.eleven-floating-badge {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #ff9800, #e53935);
+    color: white;
+    padding: 12px 14px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: -3px 4px 15px rgba(0,0,0,0.3);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 1px;
+    transition: transform 0.2s ease;
+}
+
+.eleven-floating-badge:hover {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.offer-wall-header {
+    text-align: center;
+    margin: 20px 0;
+    padding: 0 15px;
+}
+
+.offer-banners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 15px 40px 15px;
+}
+
+.offer-banner-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.offer-banner-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 992 / 1079;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
 /* Checkout Page */
 .checkout-container {
     display: grid;
