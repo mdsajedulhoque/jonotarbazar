@@ -36,7 +36,16 @@ function trackEvent(gaName, gaParams, fbName, fbParams) {
     if (typeof gtag === 'function') gtag('event', gaName, gaParams);
     if (typeof fbq === 'function') fbq('track', fbName, fbParams);
 }
+// ================= 11.11 CAMPAIGN TIME & SCHEDULE CHECK =================
+function isCampaignActive() {
+    const now = new Date();
+    // Starts Nov 10, 2026, at 10:00 PM[cite: 1]
+    const startTime = new Date('2026-11-10T22:00:00');
+    // Ends Nov 11, 2026, at 11:59:59 PM
+    const endTime = new Date('2026-11-11T23:59:59');
 
+    return now >= startTime && now <= endTime;
+}
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof products !== "undefined") {
         renderProducts(products);
@@ -47,6 +56,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const initialPage = hash ? hash : 'home';
     showPage(initialPage);
 });
+// 11.11 Campaign Display Scheduler
+    if (isCampaignActive()) {
+        const floatBtn = document.getElementById("eleven-float-btn");
+        if (floatBtn) floatBtn.style.display = "block";
+
+        if (!sessionStorage.getItem("eleven_popup_closed")) {
+            setTimeout(() => {
+                const modal = document.getElementById("eleven-promo-modal");
+                if (modal && (window.location.hash === "" || window.location.hash === "#home")) {
+                    modal.style.display = "flex";
+                }
+            }, 1200);
+        }
+    };
 
 window.addEventListener('popstate', (event) => {
     if (event.state && event.state.page) {
