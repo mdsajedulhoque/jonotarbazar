@@ -3,7 +3,7 @@ const products = [
     { id: 102, name: "প্লে টাইম কম্বো অফার (1 UNO + 1 chor police dakat babu + 1 Ludo)", category: "TodaysDeal", price: 800, originalPrice: 850, image: "JB-Game time-combo.jpg" },
     { id: 103, name: "স্টোরি টাইম পাপেট কম্বো (1 Red Bunny Puppet+ 1 Pink Bunny Puppet)", category: "TodaysDeal", price: 1400, originalPrice: 1500, image: "jonotar bazar-puppet-combo.jpg" },
     { id: 104, name: "স্টাডি প্যাক কম্বো (1 Flash Card- Bangla+ 1 Flash Card- English)", category: "TodaysDeal", price: 800, originalPrice: 830, image: "Jonatar bazar-flash-cards-combo offer-Bangla-English.jpg" },
-    { id: 105, name: "সিঙ্গাপুর ম্যাথ বই লেভেল-১ (১এ+ ১বি)", category: "TodaysDeal", price: 750, originalPrice: 900, image: "Jonotar bazar-Book-Singapore-Math-1A-1B-Combo-Offer.jpg" },
+    { id: 105, name: "সিঙ্গাপুর ম্যাথ বই লেভেল-১ (১এ+ ১বি)", category: "TodaysDeal", price: 750, originalPrice: 900, image: "Jonatar bazar-Book-Singapore-Math-1A-1B-Combo-Offer.jpg" },
     { id: 1, name: "গুফি চোর পুলিশ ডাকাত বাবু (Goofi chor police dakat babu)", category: "Toys", price: 250, image: "Goofi-Toys-Chor-Police-Dakat-Babu.jpeg" },
     { id: 2, name: "লুডু বোর্ড- ছোট (Ludo Board - Small)", category: "Toys", price: 350, image: "Goofi-Toys-Ludu-1-22 by 22.jpg" },
     { id: 3, name: "হ্যান্ড পাপেট- লাল (Hand Puppet- Red)", category: "Toys", price: 750, image: "Goofi-Toys-Hand-Puppet-Red.jpg" },
@@ -24,7 +24,7 @@ const products = [
     { id: 18, name: "মার্কাটা কি? ডালপুরি (Marka Ta Ki? Dalpuri)", category: "Books", price: 250, image: "Marka Ta Ki Dalpuri.jpg" }   
 ];
 
-// Persistent Cart Initialization (Safe with localStorage)
+// Persistent Cart Initialization
 let cart = JSON.parse(localStorage.getItem("jb_cart")) || [];
 let currentDeliveryFee = 0;
 
@@ -37,17 +37,6 @@ function trackEvent(gaName, gaParams, fbName, fbParams) {
     if (typeof fbq === 'function') fbq('track', fbName, fbParams);
 }
 
-// ================= 11.11 CAMPAIGN TIME & SCHEDULE CHECK =================
-function isCampaignActive() {
-    const now = new Date();
-    // Starts Nov 10, 2026, at 10:00 PM[cite: 1]
-    const startTime = new Date('2026-11-10T22:00:00');
-    // Ends Nov 11, 2026, at 11:59:59 PM
-    const endTime = new Date('2026-11-11T23:59:59');
-
-    return now >= startTime && now <= endTime;
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof products !== "undefined") {
         renderProducts(products);
@@ -57,21 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const hash = window.location.hash.replace('#', '');
     const initialPage = hash ? hash : 'home';
     showPage(initialPage);
-
-    // 11.11 Campaign Display Scheduler
-    if (isCampaignActive()) {
-        const floatBtn = document.getElementById("eleven-float-btn");
-        if (floatBtn) floatBtn.style.display = "block";
-
-        if (!sessionStorage.getItem("eleven_popup_closed")) {
-            setTimeout(() => {
-                const modal = document.getElementById("eleven-promo-modal");
-                if (modal && (window.location.hash === "" || window.location.hash === "#home")) {
-                    modal.style.display = "flex";
-                }
-            }, 1200);
-        }
-    }
 });
 
 window.addEventListener('popstate', (event) => {
@@ -114,19 +88,6 @@ function showPage(pageName) {
     }
     switchPageUI(pageName);
     history.pushState({ page: pageName }, '', '#' + pageName);
-}
-
-function closeElevenModal() {
-    const modal = document.getElementById("eleven-promo-modal");
-    if (modal) {
-        modal.style.display = "none";
-        sessionStorage.setItem("eleven_popup_closed", "true");
-    }
-}
-
-function openOfferWall() {
-    closeElevenModal();
-    showPage('offer-wall');
 }
 
 function renderProducts(items) {
@@ -173,6 +134,19 @@ function renderProducts(items) {
     });
 }
 
+function filterProducts(category, event) {
+    const buttons = document.querySelectorAll(".filter-btn");
+    buttons.forEach(btn => btn.classList.remove("active"));
+    if (event && event.target) event.target.classList.add("active");
+
+    if (category === 'all') {
+        renderProducts(products);
+    } else {
+        const filtered = products.filter(p => p.category === category);
+        renderProducts(filtered);
+    }
+}
+
 function toggleCart(forceOpen = false) {
     const drawer = document.getElementById("cart-drawer");
     const overlay = document.getElementById("cart-overlay");
@@ -192,6 +166,7 @@ function addToCart(productId) {
     if (!product) return;
 
     const existingIndex = cart.findIndex(item => item.id === productId);
+
     if (existingIndex > -1) {
         cart[existingIndex].quantity += 1;
     } else {
@@ -201,22 +176,18 @@ function addToCart(productId) {
     saveCart();
     updateCartUI();
     toggleCart(true);
-}
 
-// 11.11 Offer Add to Cart (Appends to existing cart safely)
-function addOfferToCart(id, name, price) {
-    const offerItem = { id: id, name: name, price: price, quantity: 1 };
-    
-    const existingIndex = cart.findIndex(item => item.id === id);
-    if (existingIndex > -1) {
-        cart[existingIndex].quantity += 1;
-    } else {
-        cart.push(offerItem);
-    }
-
-    saveCart();
-    updateCartUI();
-    goToCheckout();
+    trackEvent('add_to_cart', {
+        currency: 'BDT',
+        value: product.price,
+        items: [{ item_id: String(product.id), item_name: product.name, price: product.price, quantity: 1 }]
+    }, 'AddToCart', {
+        content_name: product.name,
+        content_ids: [String(product.id)],
+        content_type: 'product',
+        value: product.price,
+        currency: 'BDT'
+    });
 }
 
 function removeFromCart(productId) {
@@ -297,10 +268,10 @@ function handleDistrictChange() {
         upazilaWrapper.style.display = "none";
         upazilaSelect.required = false;
         upazilaSelect.value = "N/A (Outside Lakshmipur)";
-        currentDeliveryFee = 120;
+        currentDeliveryFee = 120; // Charge for outside Lakshmipur district
     } else {
-        upazilaWrapper.style.display = "none";
-        upazilaSelect.required = false;
+        upazilaWrapper.style.display = "block";
+        upazilaSelect.required = true;
         currentDeliveryFee = 0;
     }
     renderCheckoutSummary();
@@ -319,7 +290,7 @@ function updateDeliveryCharge() {
         if (upazila === "Lakshmipur Sadar") {
             currentDeliveryFee = 60;
         } else if (upazila) {
-            currentDeliveryFee = 80;
+            currentDeliveryFee = 80; // Chandraganj, Raipur, Ramganj, Ramgati, Kamalnagar
         } else {
             currentDeliveryFee = 0;
         }
@@ -381,7 +352,7 @@ function togglePaymentDetails() {
     }
 }
 
-// Final Order Submission Handler (Web3Forms & Google Sheets)
+// Final Order Submission Handler
 async function handleOrderSubmit(event) {
     event.preventDefault();
 
@@ -483,6 +454,7 @@ async function handleOrderSubmit(event) {
         return;
     }
 
+    // Populate Confirmation UI
     const detailsBox = document.getElementById("order-details-box");
     if (detailsBox) {
         detailsBox.innerHTML = `
@@ -506,6 +478,7 @@ async function handleOrderSubmit(event) {
         items: cart.map(i => ({ item_id: String(i.id), item_name: i.name, price: i.price, quantity: i.quantity }))
     }, 'Purchase', { value: grandTotal, currency: 'BDT' });
 
+    // Clear cart ONLY after successful checkout
     cart = [];
     saveCart();
     updateCartUI();
