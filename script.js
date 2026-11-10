@@ -1,9 +1,8 @@
 const products = [
-    { id: 101, name: "স্টাডি প্যাক কম্বো (1 Flash Card- Arabic + 1 Flash Card- Early Math + 1 Flash Card- English)", category: "TodaysDeal", price: 1000, originalPrice: 1050, image: "Jonatar bazar-flash-cards-combo offer.jpg" },
-    { id: 102, name: "প্লে টাইম কম্বো অফার (1 UNO + 1 chor police dakat babu + 1 Ludo)", category: "TodaysDeal", price: 800, originalPrice: 850, image: "JB-Game time-combo.jpg" },
-    { id: 103, name: "স্টোরি টাইম পাপেট কম্বো (1 Red Bunny Puppet+ 1 Pink Bunny Puppet)", category: "TodaysDeal", price: 1400, originalPrice: 1500, image: "jonotar bazar-puppet-combo.jpg" },
-    { id: 104, name: "স্টাডি প্যাক কম্বো (1 Flash Card- Bangla+ 1 Flash Card- English)", category: "TodaysDeal", price: 800, originalPrice: 830, image: "Jonatar bazar-flash-cards-combo offer-Bangla-English.jpg" },
-    { id: 105, name: "সিঙ্গাপুর ম্যাথ বই লেভেল-১ (১এ+ ১বি)", category: "TodaysDeal", price: 750, originalPrice: 900, image: "Jonatar bazar-Book-Singapore-Math-1A-1B-Combo-Offer.jpg" },
+    { id: 101, name: "11.11 Offer Sale- Marka Ta Ki? Dalpuri", category: "TodaysDeal", price: 130, originalPrice: 250, image: "offer-banner-1.jpg" },
+    { id: 102, name: "11.11 Offer Sale- Hand Puppet (Any One)", category: "TodaysDeal", price: 300, originalPrice: 750, image: "offer-banner-2.jpg" },
+    { id: 103, name: "11.11 Offer Sale- Flash Card (Any One)", category: "TodaysDeal", price: 270, originalPrice: 480, image: "offer-banner-3.jpg" },
+    { id: 104, name: "11.11 Offer Sale- Chor Police Dakat Babu", category: "TodaysDeal", price: 150, originalPrice: 250, image: "offer-banner-4.jpg" },
     { id: 1, name: "গুফি চোর পুলিশ ডাকাত বাবু (Goofi chor police dakat babu)", category: "Toys", price: 250, image: "Goofi-Toys-Chor-Police-Dakat-Babu.jpeg" },
     { id: 2, name: "লুডু বোর্ড- ছোট (Ludo Board - Small)", category: "Toys", price: 350, image: "Goofi-Toys-Ludu-1-22 by 22.jpg" },
     { id: 3, name: "হ্যান্ড পাপেট- লাল (Hand Puppet- Red)", category: "Toys", price: 750, image: "Goofi-Toys-Hand-Puppet-Red.jpg" },
