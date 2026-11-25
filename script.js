@@ -1,8 +1,4 @@
 const products = [
-    { id: 101, name: "11.11 Offer Sale- Marka Ta Ki? Dalpuri", category: "TodaysDeal", price: 130, originalPrice: 250, image: "offer-banner-1.jpg" },
-    { id: 102, name: "11.11 Offer Sale- Hand Puppet (Any One)", category: "TodaysDeal", price: 300, originalPrice: 750, image: "offer-banner-2.jpg" },
-    { id: 103, name: "11.11 Offer Sale- Flash Card (Any One)", category: "TodaysDeal", price: 270, originalPrice: 480, image: "offer-banner-3.jpg" },
-    { id: 104, name: "11.11 Offer Sale- Chor Police Dakat Babu", category: "TodaysDeal", price: 150, originalPrice: 250, image: "offer-banner-4.jpg" },
     { id: 1, name: "গুফি চোর পুলিশ ডাকাত বাবু (Goofi chor police dakat babu)", category: "Toys", price: 250, image: "Goofi-Toys-Chor-Police-Dakat-Babu.jpeg" },
     { id: 2, name: "লুডু বোর্ড- ছোট (Ludo Board - Small)", category: "Toys", price: 350, image: "Goofi-Toys-Ludu-1-22 by 22.jpg" },
     { id: 3, name: "হ্যান্ড পাপেট- লাল (Hand Puppet- Red)", category: "Toys", price: 750, image: "Goofi-Toys-Hand-Puppet-Red.jpg" },
